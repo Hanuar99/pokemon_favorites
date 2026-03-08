@@ -479,4 +479,32 @@ lib/
 **Decisión**: `core/locale/` con su propio `Repository`, `UseCase` y `Provider`.  
 **Razón**: El idioma afecta toda la app (no es exclusivo de un feature). Aún así, aplica Clean Architecture completa para mantener consistencia arquitectónica y facilitar tests unitarios aislados.
 
+### 11. N+1 calls para enriquecer el listado de Pokémon
+**Problema**: El endpoint de listado `GET /api/v2/pokemon?limit=&offset=` solo devuelve `name` y `url` de cada Pokémon — sin imagen, sin tipos, sin ningún dato visual.  
+**Decisión**: Por cada Pokémon de la página se lanza en paralelo una llamada al endpoint de detalle usando `Future.wait(...)`, cuyo resultado se usa para construir el `PokemonModel` con imagen y tipos.
+
+```dart
+// PokemonRemoteDatasourceImpl — getPokemonList
+final details = await Future.wait(
+  listResponse.results.map((item) => getPokemonDetail(item.name)),
+);
+```
+
+**Trade-off aceptado**: `Future.wait` lanza todas las llamadas en paralelo, minimizando la latencia total. El coste es `n` requests por página (20 por defecto), justificado porque la API no ofrece un endpoint alternativo que devuelva esos datos en bloque.
+
+### 12. Adaptación del detalle por limitaciones de la PokéAPI
+**Problema**: El endpoint `GET /api/v2/pokemon/{name}` no expone campos como descripción, categoría, debilidades ni género — esos datos están en endpoints separados (`/pokemon-species/`, `/type/`) que requerirían llamadas adicionales por cada Pokémon.  
+**Decisión**: Se adaptó la pantalla de detalle para mostrar los datos disponibles directamente en el endpoint:
+
+| Campo del diseño original | Reemplazo adoptado | Endpoint fuente |
+|---|---|---|
+| Categoría (ej. "Semilla") | Experiencia base (`base_experience`) | `/pokemon/{name}` |
+| Descripción Pokédex | — (no incluida) | `/pokemon-species/{name}` requeriría call extra |
+| Debilidades por tipo | — (no incluida) | `/type/{name}` requeriría call por cada tipo |
+| Género | — (no incluido) | `/pokemon-species/{name}` requeriría call extra |
+| Stats (HP, ATK, DEF...) | ✅ Incluidos con barras animadas | `/pokemon/{name}` |
+| Habilidades | ✅ Incluidas (no ocultas) | `/pokemon/{name}` |
+
+**Razón**: La prueba especifica explícitamente solo dos endpoints. Agregar más llamadas por pantalla de detalle incrementaría la complejidad de la arquitectura y los tiempos de carga sin ser un requisito evaluado. Las estadísticas y habilidades son una alternativa más rica visualmente que los campos omitidos.
+
 ---
