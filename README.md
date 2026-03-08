@@ -5,7 +5,7 @@
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.x-0175C2?logo=dart&logoColor=white)](https://dart.dev)
-[![Coverage](https://img.shields.io/badge/coverage-79.7%25-brightgreen)](coverage/html/index.html)
+[![Coverage](https://img.shields.io/badge/coverage-79.7%25-brightgreen?logo=codecov)](https://app.codecov.io/gh/Hanuar99/pokemon_favorites/tree/master)
 [![Architecture](https://img.shields.io/badge/architecture-Clean%20Architecture-informational)](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 
 Aplicación Flutter que consume la [PokéAPI](https://pokeapi.co/) y permite al usuario guardar sus Pokémon favoritos localmente.
@@ -243,15 +243,21 @@ El proyecto incluye un pipeline de GitHub Actions (`.github/workflows/ci.yml`) q
 | 8 | **Generate HTML report** | `genhtml` genera reporte visual de cobertura |
 | 9 | **Upload artifact** | Sube el reporte HTML como artefacto descargable |
 
-### Dónde queda el reporte de cobertura
+### Ver el reporte de cobertura
 
-El reporte HTML se guarda como **artifact de GitHub Actions** con el nombre `coverage-report` y está disponible durante **30 días** por ejecución:
+**Opción 1 — Online (recomendado):** el badge de Coverage en la cabecera de este README apunta directamente al reporte interactivo en Codecov:
 
 ```
-GitHub → Repositorio → Actions → [ejecución del pipeline] → Artifacts → coverage-report
+https://app.codecov.io/gh/Hanuar99/pokemon_favorites/tree/master
 ```
 
-> Descargar el `.zip`, extraerlo y abrir `index.html` en el navegador para ver la cobertura línea por línea.
+Desde ahí se puede navegar archivo por archivo y ver qué líneas están cubiertas o no.
+
+**Opción 2 — Artifact descargable:** cada ejecución del pipeline genera un reporte HTML local disponible durante 30 días:
+
+```
+GitHub → Actions → [ejecución] → Artifacts → coverage-report → descargar ZIP → abrir index.html
+```
 
 
 ---
