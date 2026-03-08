@@ -1,0 +1,23 @@
+import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
+
+import '../errors/failures.dart';
+
+abstract class UseCase<T, Params> {
+  const UseCase();
+
+  Future<Either<Failure, T>> call(Params params);
+}
+
+abstract class SyncUseCase<T, Params> {
+  const SyncUseCase();
+
+  Either<Failure, T> call(Params params);
+}
+
+final class NoParams extends Equatable {
+  const NoParams();
+
+  @override
+  List<Object?> get props => [];
+}

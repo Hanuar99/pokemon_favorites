@@ -1,11 +1,11 @@
 {
-    "name": "pokemon_favorites",
-    "short_name": "pokemon_favorites",
+    "name": "Pokédex — Pokémon Favorites",
+    "short_name": "Pokédex",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#EF5350",
+    "theme_color": "#EF5350",
+    "description": "Encuentra y guarda tus Pokémon favoritos.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
